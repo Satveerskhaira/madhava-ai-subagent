@@ -1,0 +1,21 @@
+# Concepts under `eligibility` (the top concept and its decision order are in the base pack).
+
+concepts:
+- id: eligibility.member_coverage
+  broader: eligibility
+  prefLabel: Member coverage dates
+  definition: Coverage start, end and termination dates compared with the date of service.
+  rule_domain: eligibility
+  notations:
+  - reject:65
+  - reject:67
+  - reject:68
+  - reject:69
+  altLabels:
+  - terminated
+  - termed
+  - coverage ended
+  - not covered member
+  - not eligible
+  - coverage start
+  - coverage effective

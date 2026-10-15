@@ -1,0 +1,13 @@
+# Clinical safety (DUR) domain fragment: extends the pharmacy-claims base pack.
+
+name: pharmacy-clinical-dur
+kind: fragment
+extends: pharmacy-claims
+version: '2026.10'
+agents:
+- clinical_dur
+files:
+  taxonomy: taxonomy/concepts.yaml
+  catalog: catalog/fields.yaml
+  domains: domains
+  investigator: procedures/investigator.yaml

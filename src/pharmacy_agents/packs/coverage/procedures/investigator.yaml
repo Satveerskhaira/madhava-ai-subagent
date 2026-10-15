@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  coverage:
+    notes: Always report tier placement, since cost share and some PA rules depend on it.

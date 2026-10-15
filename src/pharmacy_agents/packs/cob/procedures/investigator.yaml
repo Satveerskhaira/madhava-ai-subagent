@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  cob:
+    notes: Report the other coverage code submitted and what is on file.

@@ -1,0 +1,74 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: claim.pricing.submittedCost
+  source: record
+  entity: ClaimResponse
+  type: number
+  ncpdp: 430-DU
+  concept: cost_share
+  description: Gross amount due submitted by the pharmacy
+- path: claim.pricing.copay
+  source: record
+  entity: ClaimResponse
+  type: number
+  ncpdp: 518-FI
+  concept: cost_share.copay
+  description: Amount of copay
+- path: claim.pricing.coinsurance
+  source: record
+  entity: ClaimResponse
+  type: number
+  ncpdp: 572-4U
+  concept: cost_share.coinsurance
+  description: Amount of coinsurance
+- path: claim.pricing.deductibleApplied
+  source: record
+  entity: ClaimResponse
+  type: number
+  ncpdp: 517-FH
+  concept: cost_share.deductible
+  description: Amount applied to periodic deductible
+- path: claim.accumulators.deductibleRemaining
+  source: record
+  entity: Accumulator
+  type: number
+  concept: cost_share.deductible
+  description: Deductible remaining before this fill
+- path: plan.costShare.copay
+  source: reference
+  entity: BenefitSetting
+  type: number
+  pointer: /costShare/tiers/{tier}/{channel}/copay
+  params:
+    tier: plan.formulary.drug.tier
+    channel: claim.pharmacy.channel
+  concept: cost_share.copay
+  description: Copay for the drug's tier and channel
+- path: plan.costShare.coinsurancePct
+  source: reference
+  entity: BenefitSetting
+  type: number
+  pointer: /costShare/tiers/{tier}/{channel}/coinsurancePct
+  params:
+    tier: plan.formulary.drug.tier
+    channel: claim.pharmacy.channel
+  concept: cost_share.coinsurance
+  description: Coinsurance percent for the drug's tier and channel
+- path: plan.costShare.maxPerFill
+  source: reference
+  entity: BenefitSetting
+  type: number
+  pointer: /costShare/tiers/{tier}/{channel}/maxPerFill
+  params:
+    tier: plan.formulary.drug.tier
+    channel: claim.pharmacy.channel
+  concept: cost_share.coinsurance
+  description: Maximum member cost per fill for the tier and channel
+- path: plan.costShare.deductible.appliesToTiers
+  source: reference
+  entity: BenefitSetting
+  type: list
+  pointer: /costShare/deductible/appliesToTiers
+  concept: cost_share.deductible
+  description: Tiers where the deductible applies before copay or coinsurance

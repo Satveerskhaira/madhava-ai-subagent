@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  cost_share:
+    notes: Deductible rules override copay and coinsurance while the deductible is unmet.

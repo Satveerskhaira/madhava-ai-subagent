@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  clinical_dur:
+    notes: Refill too soon uses claims history; report the days elapsed and the threshold.

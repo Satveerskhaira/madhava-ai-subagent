@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  network:
+    notes: Specialty drugs can be limited by channel even when quantity limits pass.

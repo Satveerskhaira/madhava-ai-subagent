@@ -1,0 +1,42 @@
+# Concepts under `coverage` (the top concept and its decision order are in the base pack).
+
+concepts:
+- id: coverage.exclusion
+  broader: coverage
+  prefLabel: Benefit exclusion
+  definition: Drugs or drug classes the plan excludes from the benefit.
+  rule_domain: formulary
+  notations:
+  - reject:70
+  altLabels:
+  - excluded
+  - exclusion
+  - not covered
+  - plan exclusion
+  - benefit exclusion
+- id: coverage.formulary_status
+  broader: coverage
+  prefLabel: Formulary status
+  definition: Whether the drug is on the plan's formulary.
+  rule_domain: formulary
+  notations:
+  - reject:MR
+  altLabels:
+  - non-formulary
+  - not on formulary
+  - off formulary
+- id: coverage.tier
+  broader: coverage
+  prefLabel: Tier placement
+  definition: The formulary tier of the drug, which drives cost share and some utilization rules.
+  rule_domain: formulary
+  altLabels:
+  - tier
+  - tier placement
+  - preferred brand
+  - specialty tier
+  - generic tier
+  related:
+  - cost_share.copay
+  - cost_share.coinsurance
+  - um.prior_authorization

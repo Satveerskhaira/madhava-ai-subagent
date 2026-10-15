@@ -1,0 +1,13 @@
+# Formulary and coverage domain fragment: extends the pharmacy-claims base pack.
+
+name: pharmacy-coverage
+kind: fragment
+extends: pharmacy-claims
+version: '2026.10'
+agents:
+- coverage
+files:
+  taxonomy: taxonomy/concepts.yaml
+  catalog: catalog/fields.yaml
+  domains: domains
+  investigator: procedures/investigator.yaml

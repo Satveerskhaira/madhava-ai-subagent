@@ -15,8 +15,8 @@ jobs:
           python-version: "3.12"
       - run: pip install -r requirements-dev.txt
       - name: Validate knowledge pack
-        run: pharmacy-agents validate
+        run: pharmacy-domains validate
       - name: Replay domain goldens
-        run: pharmacy-agents --today 2026-10-14 eval
+        run: pharmacy-domains --today 2026-10-14 eval goldens/domain_goldens.yaml
       - name: Tests
         run: pytest -q

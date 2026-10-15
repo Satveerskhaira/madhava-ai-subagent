@@ -1,0 +1,31 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: claim.dos
+  source: record
+  entity: Claim
+  type: date
+  ncpdp: 401-D1
+  concept: eligibility
+  description: Date of service (date the prescription was filled)
+- path: claim.member.coverageStart
+  source: record
+  entity: Member
+  type: date
+  concept: eligibility.member_coverage
+  description: First date of the member's pharmacy coverage
+- path: claim.member.coverageEnd
+  source: record
+  entity: Member
+  type: date
+  concept: eligibility.member_coverage
+  description: Last date of coverage, absent while coverage is open
+- path: claim.member.coverageEndReason
+  source: record
+  entity: Member
+  type: string
+  concept: eligibility.member_coverage
+  description: Why coverage ended (terminated or expired)
+  decoded_values:
+    terminated: Coverage terminated
+    expired: Coverage reached its end date

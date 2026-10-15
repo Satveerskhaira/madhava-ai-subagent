@@ -1,0 +1,19 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: plan.formulary.drug.specialty
+  source: reference
+  entity: FormularyEntry
+  type: boolean
+  pointer: /formulary/drugList/{gpi}/specialty
+  params:
+    gpi: claim.drug.gpi
+  concept: network.specialty_channel
+  description: The drug is a specialty drug
+- path: plan.network.specialty.retailMaxDaysSupply
+  source: reference
+  entity: BenefitSetting
+  type: integer
+  pointer: /network/specialty/retailMaxDaysSupply
+  concept: network.specialty_channel
+  description: Maximum days supply when a specialty drug is filled at retail

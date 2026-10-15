@@ -1,35 +1,24 @@
-# Domain goldens: questions asked of one domain agent directly. Each agent must
-# explain outcomes in its scope, report the rest as out of scope, and never
-# borrow another domain's rules.
+# Domain goldens for the six domain agents in this package. Each agent must explain outcomes
+# in its scope, report the rest as out of scope, and never borrow another domain's rules.
 
 goldens:
   - {agent: eligibility, record: RX-1004, question: "Why was this claim rejected?",
-     expect: {primary: R-ELIG-001, confidence: confirmed}}
+     expect: {confidence: confirmed, primary: R-ELIG-001}}
   - {agent: coverage, record: RX-1003, question: "Why isn't this covered?",
-     expect: {primary: R-FRM-001, confidence: confirmed}}
-  - {agent: utilization_management, record: RX-1001, question: "Why was this rejected?",
-     expect: {primary: R-PA-001, confidence: confirmed, contains: ["rules have changed since this claim"]}}
-  - {agent: utilization_management, record: RX-1010, question: "Why was this rejected?",
-     expect: {primary: R-ST-001, confidence: confirmed}}
-  - {agent: utilization_management, record: RX-1007, question: "Why did this reject?",
-     expect: {primary: null, confidence: unexplained, gap: "reject:76", contains: ["Not explained by this agent"]}}
-  - {agent: utilization_management, record: RX-1009, question: "Why was this rejected?",
-     expect: {primary: null, out_of_scope: "reject:41"}}
-  - {agent: utilization_management, record: RX-1012, question: "Would this claim still pay today?",
-     expect: {compare_differs: true, current_primary: R-PA-001}}
+     expect: {confidence: confirmed, primary: R-FRM-001}}
   - {agent: clinical_dur, record: RX-1002, question: "Why did this refill reject?",
-     expect: {primary: R-RTS-001, confidence: confirmed}}
+     expect: {confidence: confirmed, primary: R-RTS-001}}
   - {agent: clinical_dur, record: RX-1011, question: "Why was this rejected?",
-     expect: {primary: R-DUR-001, confidence: confirmed}}
+     expect: {confidence: confirmed, primary: R-DUR-001}}
   - {agent: network, record: RX-1007, question: "Why did this reject with plan limitations exceeded?",
-     expect: {primary: R-NET-001, confidence: confirmed}}
+     expect: {confidence: confirmed, primary: R-NET-001}}
   - {agent: cob, record: RX-1009, question: "Why was this rejected?",
-     expect: {primary: R-COB-001, confidence: confirmed}}
+     expect: {confidence: confirmed, primary: R-COB-001}}
   - {agent: cost_share, record: RX-1001, question: "What would it cost if approved?",
-     expect: {what_if: R-CS-002, contains: ["$150.00"]}}
+     expect: {contains: [$150.00], what_if: R-CS-002}}
   - {agent: cost_share, record: RX-1005, question: "Why did the member pay $35?",
-     expect: {primary: R-CS-001, confidence: confirmed, contains: ["$35.00"]}}
+     expect: {confidence: confirmed, contains: [$35.00], primary: R-CS-001}}
   - {agent: cost_share, record: RX-1006, question: "Why did the member pay $180 instead of the copay?",
-     expect: {primary: R-ACC-001, confidence: confirmed, overridden: [R-CS-001]}}
+     expect: {confidence: confirmed, overridden: [R-CS-001], primary: R-ACC-001}}
   - {agent: cost_share, record: RX-1013, question: "Why was the copay $30?",
-     expect: {primary: R-CS-001, confidence: confirmed, contains: ["$30.00", "2026.01"]}}
+     expect: {confidence: confirmed, contains: [$30.00, '2026.01'], primary: R-CS-001}}

@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  eligibility:
+    notes: Eligibility is checked first in adjudication; a fired eligibility rule is usually the primary reason.
