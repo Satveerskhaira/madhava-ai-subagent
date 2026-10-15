@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: Validate knowledge pack
+        run: pharmacy-agents validate
+      - name: Replay domain goldens
+        run: pharmacy-agents --today 2026-10-14 eval
+      - name: Tests
+        run: pytest -q

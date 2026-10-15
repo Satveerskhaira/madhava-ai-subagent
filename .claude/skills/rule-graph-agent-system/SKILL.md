@@ -1,0 +1,115 @@
+---
+name: rule-graph-agent-system
+description: Build, extend or review a planner-based multi-agent system that explains why a record was decided the way it was (claims, orders, payments, credit, eligibility, pricing, compliance) by searching a rules/policy graph, reading only needed fields from source APIs, evaluating CEL rule cards deterministically and answering with cited evidence. Covers both the core agent (a planner over domain agents) and domain agents/subagents (each a planner over rule-domain investigators, shippable as its own repo), built on the SDK-neutral rulegraph kernel with adapters for Google ADK, A2A and MCP and patterns for other agent SDKs (LangGraph, OpenAI Agents SDK, Claude Agent SDK, CrewAI, Semantic Kernel). Use whenever someone wants a core or domain/sub-domain agent that plans, routes by taxonomy, loops on gaps, explains rejects or amounts, or asks about taxonomy, ontology, rule graphs, agent memory types or planner hierarchies - even if they don't name this skill.
+---
+
+# Rule-graph agent system
+
+A pattern for answering "why did this record behave the way it did?" when the engine that decided it leaves no trace. The code lives in the **rulegraph** kernel (a plain Python package, no agent SDK in its core). Projects built on it contain knowledge (YAML), one small record adapter, and wiring. Reuse the kernel; do not re-derive it.
+
+## The shape
+
+Every level is the same planner with a different scope and different executors.
+
+```
+user / any agent SDK --(adapter: ADK workflow, A2A, MCP, your SDK)--> CORE planner
+  CORE planner          executors = domain agents (in process, imported package; no network hop)
+    understand -> plan -> act (fan-out) -> verify --gap round (bounded)--> act -> synthesize -> remember
+  DOMAIN agent          = planner scoped to one taxonomy branch; executors = rule-domain investigators
+    same loop: routes by its own taxonomy branch, sweeps its scope if unrouted, own gap round,
+    answers directly ("from the credit point of view...") or reports findings + gaps to the core
+  INVESTIGATOR          fixed playbook, no model:
+    recall_rules (policy graph) -> resolve_inputs (field catalog -> API slices) -> evaluate (CEL)
+    -> apply_overrides -> widen_if_unexplained (max 1) -> phrase
+```
+
+`Planner` is also an `Executor` (`name` + `async handle(DomainTask) -> DomainReport`). So a domain agent can be used by a core planner, asked directly, tested alone, or put behind any transport. Read `references/architecture.md` for the full design.
+
+## Design rules, and why
+
+1. **Models never decide outcomes.** Routing, retrieval, evaluation, overrides, precedence and coverage are deterministic. A model only understands the question and phrases the answer (optional, at most two calls). Answers are then auditable, replayable and cheap, and a model cannot invent a reason.
+2. **Rules are data.** Versioned rule cards (inputs from a closed field catalog, CEL condition, outcome token, template, sources) in effective-dated releases. Old records are explained with the rules in force then, and compared with today's.
+3. **The taxonomy defines the agents.** Top concepts carry `agent` and `precedence`; leaves carry `rule_domain` and `notations` (outcome tokens). A new domain agent is a knowledge change.
+4. **The ontology is enforced.** The policy graph rejects edges the ontology does not declare.
+5. **Agents read slices, not payloads.** Catalog paths map to JSON Pointers. Tasks carry a context reference (ids, dates), never record data.
+6. **Every loop has a verifier and a cap.** Coverage check: every observed outcome token needs a fired rule. Gap rounds are bounded at each level. Still unexplained means say so and log it for experts; never guess.
+7. **The kernel is SDK-neutral.** Agent SDKs are adapters at the edges. Models plug in as a plain `async complete(system, user) -> str`.
+8. **Core to domain agents is in process.** Domain agents are an installed package the core imports. Only the agent you expose (usually the core) gets a network interface. Add a transport between core and domain agents only if they must scale or deploy separately, by wrapping a client as an `Executor`.
+
+## Decide what is being built
+
+- **Domain agents (subagents) repo**: knowledge pack + record adapter + `build()` returning `{agent name: Planner}`. Knows nothing about the core. Usable on its own.
+- **Core agent repo**: depends on the domain agents package, adds core planner procedures (`planner.yaml`), goldens across domains, and the external interface (A2A, MCP, ADK, or another SDK).
+- **Both**, starting from a domain only: build the subagents repo first, then the core.
+- **Extending** an existing project: skip to the build steps that apply.
+
+## Build steps
+
+Keep `validate`, `eval` and the tests green after every step.
+
+### 0. Gather the domain facts
+
+Ask the user, or find in their docs and code:
+- the **records** being explained and their API (ids, dates, status, outcome codes, amounts)
+- the **reference data** the rules read (plan, product, account terms) and how it is versioned by date
+- the **outcomes** to explain and the official code list
+- the engine's **decision order** (which checks run first)
+- where **rules** are written today (policy docs, config guides) and who owns each area
+- which date applies the rules: decision date or service date
+
+If you only get a domain name, propose a first taxonomy and a few outcome codes and confirm them before building.
+
+### 1. Get the kernel
+
+`pip show rulegraph`. If missing, look for a `rulegraph` pin in the repo's `requirements*.txt` or `pyproject.toml`; otherwise ask the user for the kernel's pip spec (while it lives inside another repo it is a git URL ending `#subdirectory=kernel`). Extras: `rulegraph[adk]` (Google ADK + A2A), `rulegraph[mcp]`.
+
+### 2. Scaffold
+
+```bash
+rulegraph new subagents --dest <dir> --package <pkg>_agents --kernel-spec "<kernel pip spec>"
+rulegraph new core --dest <dir> --package <pkg>_core --agents-package <pkg>_agents \
+    --kernel-spec "<kernel pip spec>" --agents-spec "<agents pip spec, e.g. git URL>"
+cd <dir> && pip install -r requirements-dev.txt && <dist> validate && <dist> --today <YYYY-MM-DD> eval && pytest
+```
+
+The subagents template ships a small working example pack (orders: credit, fulfillment, charges) so it starts green. The core template is wired to it. `--dest` may be an empty cloned repo.
+
+### 3. Replace the knowledge, one domain agent at a time
+
+Follow `references/adapting-a-domain.md`; schemas are in `references/knowledge-pack.md`. Per domain agent: taxonomy branch, catalog fields, codes, rule domains with releases and rule cards, fixtures, then domain goldens (`agent`, `record`, `question`, `expect`). Run `<dist> validate` after each file.
+
+### 4. Write the record adapter
+
+`record.py` maps the record API to a `RecordView`: status, `adverse`, outcome tokens (`<codes_kind>:<code>`), amount tokens (`price:<component>` when charged), reference id, service and decision dates, and derived fields rules need (for example days since enrollment). It is the only domain code. Point the toolbox at HTTP APIs via `HttpRecordApi`/`HttpReferenceApi` path templates, or implement the two small protocols.
+
+### 5. Tune procedures
+
+- Domain agents: `pack/procedures/domain_planner.yaml` (`delegated_explain`, `delegated_what_if` for core tasks; `explain_outcome`, `explain_cost`, `what_if_approved`, `compare_current`, `define_term` for direct questions). Keep `sweep_if_unrouted: true` and `loop.expand: [policy_graph, related_concepts, sweep_scope]`.
+- Investigators: `investigator.yaml` playbook and per-agent notes.
+- Core: `procedures/planner.yaml`; `speculative` lists agents always asked (`"*"` = all), `must_explain` sets the coverage check.
+- Intents: regex patterns in `intents.yaml`, used when no model is configured.
+- Wording: `pack.yaml` `phrases` and `token_labels` (see `references/knowledge-pack.md`).
+
+### 6. Core goldens and loop checks
+
+Core goldens prove cross-domain behaviour. Include at least: one per domain agent, one gap-round case (`agents_in_round_2`), one unexplained case (`gap`), one amount, one what-if, one `compare_current`. See `references/testing.md`.
+
+### 7. Expose the agent through an SDK
+
+Only at the edges. ADK is implemented and tested (`rulegraph.adapters.adk`: `build_workflow`, `a2a_app`, `adk_completion`, `AdkExecutor`); MCP too (`rulegraph.adapters.mcp.build_mcp_server`). For any other SDK follow `references/sdk-adapters.md`: wrap `planner.ask` as that SDK's tool, node or agent, and pass a `complete` function for model understanding. Never import an SDK in pack, adapter or kernel-core code.
+
+### 8. Verify and hand over
+
+Run `validate`, `eval`, `pytest` in each repo; ask a few questions with `--trace` and read the trace (routes, rounds, gaps). Domain agents repo CI installs the kernel; core repo CI installs kernel and domain agents from their pins. Tag releases so pins are reproducible.
+
+## When reviewing an existing system
+
+Check: models deciding outcomes; rules embedded in code; unbounded loops or loops without a verifier; agents receiving full payloads; domain agents called over a network without need; an SDK imported in core logic; outcome codes with no notation and no goldens; release ranges overlapping; goldens missing for gap and unexplained cases.
+
+## References
+
+- `references/architecture.md`: levels, loop, memory types, graph search, routing, scaling
+- `references/knowledge-pack.md`: every pack file with schema and example
+- `references/adapting-a-domain.md`: checklist for replacing the example knowledge
+- `references/sdk-adapters.md`: ADK, A2A, MCP, and patterns for LangGraph, OpenAI Agents SDK, Claude Agent SDK, CrewAI, Semantic Kernel
+- `references/testing.md`: goldens, expect keys, tests every project should keep

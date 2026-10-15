@@ -1,0 +1,3 @@
+# The rulegraph kernel (lives in a subfolder of another repo for now; pinned by commit).
+rulegraph[adk] @ git+https://github.com/Satveerskhaira/madhava-ai.git@9d10000c433b095d2cab047d1a1ec11ae240b954#subdirectory=kernel
+-e .[adk,dev]

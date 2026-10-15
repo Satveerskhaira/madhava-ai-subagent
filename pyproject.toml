@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pharmacy-agents"
+version = "0.1.0"
+description = "Pharmacy claim domain agents: planners over rule-domain investigators, built on the rulegraph kernel"
+readme = "README.md"
+requires-python = ">=3.11"
+# The rulegraph kernel is installed from its repository; see requirements-dev.txt.
+dependencies = ["rulegraph>=0.1"]
+
+[project.optional-dependencies]
+adk = ["rulegraph[adk]>=0.1"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+pharmacy-agents = "pharmacy_agents.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+pharmacy_agents = ["pack/**/*.yaml", "fixtures/**/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::UserWarning", "ignore::DeprecationWarning"]
