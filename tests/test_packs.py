@@ -23,7 +23,7 @@ def test_taxonomy_agents_and_rule_domains(knowledge):
     assert tax.rule_domains("clinical_dur") == {"dur", "refill_too_soon"}
     assert tax.classify("reject:41").startswith("cob.")
     assert tax.precedence("eligibility.member_coverage") < tax.precedence("cost_share.copay")
-    assert tax.rule_domains("utilization_management") == set()      # lives in its own package
+    assert tax.rule_domains("utilization_management") == {"prior_authorization", "step_therapy", "quantity_limits"}
 
 
 def test_question_matching_prefers_longest_labels(knowledge):

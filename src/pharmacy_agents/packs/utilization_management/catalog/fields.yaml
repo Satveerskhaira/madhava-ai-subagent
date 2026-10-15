@@ -1,0 +1,78 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: claim.member.daysSinceEnrollment
+  source: record
+  entity: Member
+  type: integer
+  concept: um.prior_authorization
+  description: Days between enrollment and the date of service
+- path: claim.quantity
+  source: record
+  entity: Claim
+  type: number
+  ncpdp: 442-E7
+  concept: um.quantity_limits
+  description: Quantity dispensed
+- path: claim.priorAuth.onFile
+  source: record
+  entity: Claim
+  type: boolean
+  concept: um.prior_authorization
+  description: An approved prior authorization covers this fill
+- path: claim.history.stepDrugsFilled
+  source: record
+  entity: ClaimHistory
+  type: list
+  concept: um.step_therapy
+  description: Drugs filled in the step therapy lookback window
+- path: plan.formulary.drug.paRequired
+  source: reference
+  entity: FormularyEntry
+  type: boolean
+  pointer: /formulary/drugList/{gpi}/paRequired
+  params:
+    gpi: claim.drug.gpi
+  concept: um.prior_authorization
+  description: The drug is individually flagged as needing prior authorization
+- path: plan.formulary.drug.qlQuantity
+  source: reference
+  entity: FormularyEntry
+  type: number
+  pointer: /formulary/drugList/{gpi}/qlQuantity
+  params:
+    gpi: claim.drug.gpi
+  concept: um.quantity_limits
+  description: Maximum quantity per fill for the drug
+- path: plan.formulary.drug.stepPrereqs
+  source: reference
+  entity: FormularyEntry
+  type: list
+  pointer: /formulary/drugList/{gpi}/stepPrereqs
+  params:
+    gpi: claim.drug.gpi
+  concept: um.step_therapy
+  description: Drugs that must be tried first
+- path: plan.um.priorAuth.requiredTiers
+  source: reference
+  entity: BenefitSetting
+  type: list
+  pointer: /um/priorAuth/requiredTiers
+  concept: um.prior_authorization
+  description: Tiers where every drug needs prior authorization
+- path: plan.um.priorAuth.transitionFillDays
+  source: reference
+  entity: BenefitSetting
+  type: integer
+  pointer: /um/priorAuth/transitionFillDays
+  concept: um.prior_authorization
+  description: New-member transition window in which prior authorization is waived
+- path: plan.limits.maxDaysSupply
+  source: reference
+  entity: BenefitSetting
+  type: integer
+  pointer: /limits/maxDaysSupply/{channel}
+  params:
+    channel: claim.pharmacy.channel
+  concept: um.quantity_limits
+  description: Maximum days supply per fill for the channel

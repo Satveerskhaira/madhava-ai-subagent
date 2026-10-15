@@ -26,6 +26,9 @@ def task(system, agent, record, tokens=(), concepts=(), hints=(), mode="explain"
                       concepts=list(concepts), hints=list(hints), question="why?")
 
 
+GOLDENS = [g for g in GOLDENS if g["agent"] != "utilization_management"]     # UM: test_utilization_management.py
+
+
 @pytest.mark.parametrize("golden", GOLDENS, ids=[f"{g['agent']}-{g['record']}" for g in GOLDENS])
 def test_domain_goldens(system, golden):
     exp = run(system.agents[golden["agent"]].ask(golden["question"], golden["record"]))
@@ -82,11 +85,11 @@ def test_agent_cards_list_concepts_as_skills(system):
     assert "price:copay" in skill["tags"] and "rule_domain:benefit_copay" in skill["tags"]
 
 
-def test_six_packages_are_registered_separately():
+def test_seven_packages_are_registered_separately():
     from rulegraph import discover
     names = {p.name for p in discover(extends="pharmacy-claims")}
-    assert {"pharmacy-eligibility", "pharmacy-coverage", "pharmacy-clinical-dur", "pharmacy-network",
-            "pharmacy-cob", "pharmacy-cost-share"} <= names
+    assert {"pharmacy-eligibility", "pharmacy-coverage", "pharmacy-um", "pharmacy-clinical-dur",
+            "pharmacy-network", "pharmacy-cob", "pharmacy-cost-share"} <= names
 
 
 def test_runs_as_an_adk_workflow(system):

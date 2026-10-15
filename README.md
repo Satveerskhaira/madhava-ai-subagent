@@ -1,8 +1,8 @@
 # pharmacy-agents
 
-Pharmacy claim domain agents that do not yet have their own repositories: **eligibility, coverage, clinical DUR, network, COB and cost share**. Utilization management already lives in its own repo (`pharmacy-um-agent`), and the others will follow the same pattern.
+The pharmacy claim domain agents: **eligibility, coverage, utilization management, clinical DUR, network, COB and cost share**.
 
-Each domain here is a separate **knowledge fragment** (`src/pharmacy_agents/packs/<agent>/`) that extends the shared pharmacy base pack (`pharmacy-base`), and each is registered as its own `rulegraph.domains` entry point. Moving a domain to its own repo means moving its folder and entry point; nothing else changes.
+Each domain is a separate **knowledge fragment** (`src/pharmacy_agents/packs/<agent>/`) that extends the shared pharmacy base pack (`pharmacy-base`), and each is registered as its own `rulegraph.domains` entry point. Moving a domain to its own repo means moving its folder and entry point; nothing else changes.
 
 Every domain agent is a planner with the core's capabilities: it plans which of its rule domains to check, runs its investigators concurrently, verifies every outcome in its scope is explained, runs its own bounded gap round, and answers from its domain's point of view with cited evidence. A core planner discovers the installed domain packages and calls the agents in process, sharing its context and memory.
 
@@ -10,6 +10,7 @@ Every domain agent is a planner with the core's capabilities: it plans which of 
 |---|---|
 | `eligibility` | eligibility |
 | `coverage` | formulary (including exclusions) |
+| `utilization_management` | prior_authorization, step_therapy, quantity_limits |
 | `clinical_dur` | dur (drug interactions), refill_too_soon |
 | `network` | network (pharmacy channel and limits) |
 | `cob` | cob |
@@ -26,7 +27,8 @@ pytest
 
 ```python
 import pharmacy_agents
-system = pharmacy_agents.build()          # these six domains on the pharmacy base
+system = pharmacy_agents.build()                                      # all seven on the pharmacy base
+um = pharmacy_agents.build(agents=["utilization_management"])        # one domain alone, as its tests do
 exp = await system.agents["coverage"].ask("Why isn't this covered?", "RX-1003")
 ```
 
