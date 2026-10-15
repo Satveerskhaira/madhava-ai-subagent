@@ -1,0 +1,15 @@
+# Concepts under `network` (the top concept and its decision order are in the base pack).
+
+concepts:
+- id: network.specialty_channel
+  broader: network
+  prefLabel: Specialty channel
+  definition: Specialty drugs limited to specific pharmacies or days supply by channel.
+  rule_domain: network
+  altLabels:
+  - specialty pharmacy
+  - specialty channel
+  - retail specialty
+  - channel
+  related:
+  - um.quantity_limits

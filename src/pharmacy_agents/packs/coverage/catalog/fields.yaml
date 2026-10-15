@@ -1,0 +1,21 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: plan.formulary.drug.onFormulary
+  source: reference
+  entity: FormularyEntry
+  type: boolean
+  pointer: /formulary/drugList/{gpi}/onFormulary
+  params:
+    gpi: claim.drug.gpi
+  concept: coverage.formulary_status
+  description: The drug is on the plan formulary
+- path: plan.formulary.drug.excluded
+  source: reference
+  entity: FormularyEntry
+  type: boolean
+  pointer: /formulary/drugList/{gpi}/excluded
+  params:
+    gpi: claim.drug.gpi
+  concept: coverage.exclusion
+  description: The drug is excluded from the benefit

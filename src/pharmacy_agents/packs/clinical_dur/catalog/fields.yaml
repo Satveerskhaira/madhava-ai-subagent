@@ -1,0 +1,44 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: claim.history.daysSinceLastFill
+  source: record
+  entity: ClaimHistory
+  type: integer
+  concept: dur.refill_too_soon
+  description: Days since the previous fill of the same drug
+- path: claim.history.lastDaysSupply
+  source: record
+  entity: ClaimHistory
+  type: integer
+  concept: dur.refill_too_soon
+  description: Days supply of the previous fill
+- path: claim.history.activeDrugs
+  source: record
+  entity: ClaimHistory
+  type: list
+  concept: dur.drug_interaction
+  description: Drugs with active supply on the date of service
+- path: plan.formulary.drug.interactsWith
+  source: reference
+  entity: FormularyEntry
+  type: list
+  pointer: /formulary/drugList/{gpi}/interactsWith
+  params:
+    gpi: claim.drug.gpi
+  concept: dur.drug_interaction
+  description: Drugs with a severe interaction with this drug
+- path: plan.dur.refillTooSoon.thresholdPct
+  source: reference
+  entity: BenefitSetting
+  type: number
+  pointer: /dur/refillTooSoon/thresholdPct
+  concept: dur.refill_too_soon
+  description: Percent of the previous days supply that must be used before a refill
+- path: plan.dur.interactions.reject
+  source: reference
+  entity: BenefitSetting
+  type: boolean
+  pointer: /dur/interactions/reject
+  concept: dur.drug_interaction
+  description: Severe drug interactions reject rather than warn

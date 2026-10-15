@@ -1,0 +1,23 @@
+# Fields only this domain's rules read. Shared fields are in the base pack.
+
+fields:
+- path: claim.member.otherCoverageOnFile
+  source: record
+  entity: Member
+  type: boolean
+  concept: cob.other_coverage
+  description: Other primary coverage is on file for the member
+- path: claim.otherCoverageCode
+  source: record
+  entity: Claim
+  type: string
+  ncpdp: 308-C8
+  concept: cob.other_coverage
+  description: Other coverage code submitted on the claim
+- path: plan.cob.primaryFirst
+  source: reference
+  entity: BenefitSetting
+  type: boolean
+  pointer: /cob/primaryFirst
+  concept: cob.other_coverage
+  description: Claims must go to the primary payer first when other coverage is on file

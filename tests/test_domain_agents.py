@@ -32,25 +32,6 @@ def test_domain_goldens(system, golden):
     assert check(exp, golden["expect"]) == [], exp.answer
 
 
-def test_delegated_task_returns_findings_and_a_domain_answer(system):
-    report = run(system.agents["utilization_management"].handle(
-        task(system, "utilization_management", "RX-1001", ["reject:75"], ["um.prior_authorization"])))
-    pa = next(f for f in report.findings if f.rule_id == "R-PA-001")
-    assert (pa.status, pa.confidence, pa.agent, pa.unit) == ("fired", "confirmed", "utilization_management",
-                                                             "prior_authorization")
-    assert pa.overrides_checked[0]["rule"] == "R-PA-OVR-002@1" and pa.overrides_checked[0]["matched"] is False
-    assert report.answer.startswith("Utilization management agent:") and report.gaps == []
-    assert DomainReport.model_validate_json(report.model_dump_json()).findings[0].rule_id
-
-
-def test_domain_agent_plans_its_own_gap_round(system):
-    report = run(system.agents["utilization_management"].handle(
-        task(system, "utilization_management", "RX-1007", ["reject:76"], ["um.quantity_limits"])))
-    assert [r.reason for r in report.rounds] == ["initial plan", "gap round"]
-    assert report.rounds[0].agents == ["quantity_limits:explain:as_decided"]
-    assert report.gaps == ["reject:76"]                 # honest: no UM rule explains it
-
-
 def test_out_of_scope_token_routes_through_hints_and_graph(system):
     # The core's gap round sends reject:76 to network with a hint; network routes it inside its scope.
     report = run(system.agents["network"].handle(
@@ -73,11 +54,6 @@ def test_override_is_evaluated_across_rule_domains(system):
     assert len([f for f in report.findings if f.rule_id == "R-ACC-001"]) == 1   # deduplicated
 
 
-def test_current_rules_mode_uses_newer_versions(system):
-    exp = run(system.agents["utilization_management"].ask("Why was this rejected?", "RX-1001", rules_mode="current"))
-    assert exp.primary.key == "R-PA-001@2"
-
-
 def test_session_follow_up_reuses_findings(system):
     cs = system.agents["cost_share"]
     run(cs.ask("Why did the member pay $35?", "RX-1005", session_id="s1"))
@@ -86,24 +62,51 @@ def test_session_follow_up_reuses_findings(system):
 
 
 def test_failed_investigator_becomes_an_error_report(system):
-    agent = system.agents["utilization_management"]
+    agent = system.agents["coverage"]
 
     class Broken:
-        name = "prior_authorization"
+        name = "formulary"
 
         async def handle(self, t):
             raise RuntimeError("rule store unavailable")
 
-    agent.executors["prior_authorization"] = Broken()
-    exp = run(agent.ask("Why was this rejected?", "RX-1001"))
-    assert exp.primary is None and "reject:75" in exp.gaps
+    agent.executors["formulary"] = Broken()
+    exp = run(agent.ask("Why isn't this covered?", "RX-1003"))
+    assert exp.primary is None and exp.gaps
 
 
 def test_agent_cards_list_concepts_as_skills(system):
-    card = agent_card(system.agents["utilization_management"])
-    assert card["name"] == "pharmacy-utilization_management"
-    skill = next(s for s in card["skills"] if s["id"] == "um.prior_authorization")
-    assert "reject:75" in skill["tags"] and "rule_domain:prior_authorization" in skill["tags"]
+    card = agent_card(system.agents["cost_share"])
+    assert card["name"] == "pharmacy-cost_share"
+    skill = next(s for s in card["skills"] if s["id"] == "cost_share.copay")
+    assert "price:copay" in skill["tags"] and "rule_domain:benefit_copay" in skill["tags"]
+
+
+def test_six_packages_are_registered_separately():
+    from rulegraph import discover
+    names = {p.name for p in discover(extends="pharmacy-claims")}
+    assert {"pharmacy-eligibility", "pharmacy-coverage", "pharmacy-clinical-dur", "pharmacy-network",
+            "pharmacy-cob", "pharmacy-cost-share"} <= names
+
+
+def test_runs_as_an_adk_workflow(system):
+    pytest.importorskip("google.adk")
+    from google.adk.runners import InMemoryRunner
+
+    from rulegraph.adapters.adk import build_workflow
+
+    async def go():
+        runner = InMemoryRunner(node=build_workflow(system.agents["network"]), app_name="net")
+        session = await runner.session_service.create_session(app_name="net", user_id="u")
+        out = None
+        async for ev in runner.run_async(user_id="u", session_id=session.id,
+                                         state_delta={"request": {"record_id": "RX-1007", "question": "Why did this reject?"}}):
+            if isinstance(ev.output, dict) and "answer" in ev.output:
+                out = ev.output
+        return out
+
+    out = run(go())
+    assert out["agent"] == "network" and out["primary"]["rule_id"] == "R-NET-001"
 
 
 def test_knowledge_question_without_a_claim(system):
@@ -120,9 +123,9 @@ def _completion(replies):
 
 def test_model_understanding_is_filtered(knowledge):
     lang = ModelLanguage(knowledge.taxonomy, knowledge.procedures.intents,
-                         _completion(['{"intents": ["explain_outcome", "hack"], "concepts": ["um.step_therapy", "x.y"]}']))
+                         _completion(['{"intents": ["explain_outcome", "hack"], "concepts": ["network.specialty_channel", "x.y"]}']))
     ask = run(lang.understand("why did this fail", "RX-1"))
-    assert ask.intents == ["explain_outcome"] and ask.concepts == ["um.step_therapy"]
+    assert ask.intents == ["explain_outcome"] and ask.concepts == ["network.specialty_channel"]
 
 
 def test_model_narration_must_cite_known_rules(knowledge):

@@ -3,7 +3,7 @@ from datetime import date
 
 import pytest
 
-from rulegraph import Knowledge, Settings
+from rulegraph import Settings
 
 import pharmacy_agents as pa
 
@@ -13,8 +13,8 @@ TODAY = date(2026, 10, 14)
 
 
 @pytest.fixture(scope="session")
-def knowledge() -> Knowledge:
-    return Knowledge.load(pa.pack_dir())
+def knowledge():
+    return pa.build(Settings(today=TODAY)).knowledge
 
 
 @pytest.fixture()

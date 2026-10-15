@@ -1,0 +1,41 @@
+# Concepts under `cost_share` (the top concept and its decision order are in the base pack).
+
+concepts:
+- id: cost_share.copay
+  broader: cost_share
+  prefLabel: Copay
+  definition: A flat amount the member pays per fill for a tier and channel.
+  rule_domain: benefit_copay
+  notations:
+  - price:copay
+  altLabels:
+  - copay
+  - co-pay
+  - flat amount
+  related:
+  - coverage.tier
+- id: cost_share.coinsurance
+  broader: cost_share
+  prefLabel: Coinsurance
+  definition: A percentage of the drug cost the member pays, sometimes capped per fill.
+  rule_domain: benefit_copay
+  notations:
+  - price:coinsurance
+  altLabels:
+  - coinsurance
+  - percent
+  - percentage
+  related:
+  - coverage.tier
+- id: cost_share.deductible
+  broader: cost_share
+  prefLabel: Deductible
+  definition: Amount the member pays in full before copay or coinsurance applies.
+  rule_domain: accumulators
+  notations:
+  - price:deductible
+  altLabels:
+  - deductible
+  - accumulator
+  - toward deductible
+  - full price

@@ -1,0 +1,28 @@
+# Concepts under `dur` (the top concept and its decision order are in the base pack).
+
+concepts:
+- id: dur.refill_too_soon
+  broader: dur
+  prefLabel: Refill too soon
+  definition: Not enough of the previous fill's days supply has been used.
+  rule_domain: refill_too_soon
+  notations:
+  - reject:79
+  altLabels:
+  - refill too soon
+  - too early
+  - early refill
+  - refilled early
+- id: dur.drug_interaction
+  broader: dur
+  prefLabel: Drug interaction
+  definition: The submitted drug interacts with another active medication.
+  rule_domain: dur
+  notations:
+  - reject:88
+  altLabels:
+  - interaction
+  - drug interaction
+  - drug-drug
+  - dur reject
+  - conflict
