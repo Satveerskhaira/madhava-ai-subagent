@@ -1,0 +1,13 @@
+# Utilization management domain fragment: extends the pharmacy-claims base pack.
+
+name: pharmacy-um
+kind: fragment
+extends: pharmacy-claims
+version: '2026.10'
+agents:
+- utilization_management
+files:
+  taxonomy: taxonomy/concepts.yaml
+  catalog: catalog/fields.yaml
+  domains: domains
+  investigator: procedures/investigator.yaml

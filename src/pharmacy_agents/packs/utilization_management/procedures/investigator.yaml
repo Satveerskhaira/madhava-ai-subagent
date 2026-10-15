@@ -1,0 +1,5 @@
+# Notes for this domain agent's investigators (the playbook itself is in the base pack).
+
+agents:
+  utilization_management:
+    notes: Check overrides such as transition fills before reporting a prior authorization reject.

@@ -1,0 +1,46 @@
+# Concepts under `um` (the top concept and its decision order are in the base pack).
+
+concepts:
+- id: um.prior_authorization
+  broader: um
+  prefLabel: Prior authorization
+  definition: Approval required from the plan before the drug is covered.
+  rule_domain: prior_authorization
+  notations:
+  - reject:75
+  altLabels:
+  - prior authorization
+  - prior auth
+  - pa
+  - authorization
+  related:
+  - coverage.tier
+- id: um.step_therapy
+  broader: um
+  prefLabel: Step therapy
+  definition: A first-line drug must be tried before the submitted drug is covered.
+  rule_domain: step_therapy
+  notations:
+  - reject:608
+  altLabels:
+  - step therapy
+  - step edit
+  - first-line drug
+  - try first
+- id: um.quantity_limits
+  broader: um
+  prefLabel: Quantity and days supply limits
+  definition: Limits on quantity dispensed or days supply per fill.
+  rule_domain: quantity_limits
+  notations:
+  - reject:76
+  - reject:7X
+  altLabels:
+  - quantity limit
+  - ql
+  - too many
+  - days supply
+  - plan limitations
+  - plan limit
+  related:
+  - network.specialty_channel

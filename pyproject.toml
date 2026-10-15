@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pharmacy-agents"
 version = "0.2.0"
-description = "Pharmacy claim domain agents (six domains, each its own knowledge fragment) on the pharmacy base"
+description = "Pharmacy claim domain agents (seven domains, each its own knowledge fragment) on the pharmacy base"
 readme = "README.md"
 requires-python = ">=3.11"
 # Kernel and base are installed from their repository; see requirements-dev.txt.
@@ -18,6 +18,7 @@ dev = ["pytest>=8"]
 [project.entry-points."rulegraph.domains"]
 eligibility = "pharmacy_agents:eligibility"
 coverage = "pharmacy_agents:coverage"
+utilization_management = "pharmacy_agents:utilization_management"
 clinical_dur = "pharmacy_agents:clinical_dur"
 network = "pharmacy_agents:network"
 cob = "pharmacy_agents:cob"

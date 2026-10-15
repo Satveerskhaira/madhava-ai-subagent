@@ -1,4 +1,4 @@
-# Domain goldens for the six domain agents in this package. Each agent must explain outcomes
+# Domain goldens for the seven domain agents in this package. Each agent must explain outcomes
 # in its scope, report the rest as out of scope, and never borrow another domain's rules.
 
 goldens:
@@ -6,6 +6,16 @@ goldens:
      expect: {confidence: confirmed, primary: R-ELIG-001}}
   - {agent: coverage, record: RX-1003, question: "Why isn't this covered?",
      expect: {confidence: confirmed, primary: R-FRM-001}}
+  - {agent: utilization_management, record: RX-1001, question: "Why was this rejected?",
+     expect: {confidence: confirmed, contains: [rules have changed since this claim], primary: R-PA-001}}
+  - {agent: utilization_management, record: RX-1010, question: "Why was this rejected?",
+     expect: {confidence: confirmed, primary: R-ST-001}}
+  - {agent: utilization_management, record: RX-1007, question: "Why did this reject?",
+     expect: {confidence: unexplained, contains: [Not explained by this agent], gap: 'reject:76', primary: null}}
+  - {agent: utilization_management, record: RX-1009, question: "Why was this rejected?",
+     expect: {out_of_scope: 'reject:41', primary: null}}
+  - {agent: utilization_management, record: RX-1012, question: "Would this claim still pay today?",
+     expect: {compare_differs: true, current_primary: R-PA-001}}
   - {agent: clinical_dur, record: RX-1002, question: "Why did this refill reject?",
      expect: {confidence: confirmed, primary: R-RTS-001}}
   - {agent: clinical_dur, record: RX-1011, question: "Why was this rejected?",
