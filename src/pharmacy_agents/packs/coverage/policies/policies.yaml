@@ -1,0 +1,30 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: Plan Setup Guide v7
+  section: 3.1 Formulary status
+  title: Drugs not on the formulary
+  text: A drug that is not on the plan formulary, or has no formulary entry for the plan version in force, is not
+    covered and the claim rejects. A formulary exception, when approved, is loaded as a formulary entry.
+  owner: coverage-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'
+- doc: Plan Setup Guide v7
+  section: 3.2 Tier placement
+  title: Formulary tier placement
+  text: Every formulary drug sits on one tier. The tier drives member cost share and tier-based edits such as prior
+    authorization by tier, so explanations always state it.
+  owner: coverage-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'
+- doc: Plan Setup Guide v7
+  section: 3.4 Benefit exclusions
+  title: Benefit exclusions
+  text: Drugs the plan excludes from the pharmacy benefit reject even when they appear on the formulary list. Exclusions
+    are set per drug in plan setup.
+  owner: coverage-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'

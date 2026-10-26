@@ -1,0 +1,20 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: formulary-status
+  prefLabel: Formulary status
+  definition: Whether a drug is on the plan's formulary. Drugs not on the formulary are not covered unless an exception
+    is approved.
+  altLabels:
+  - on formulary
+  - non-formulary
+  concepts:
+  - coverage.formulary_status
+- id: benefit-exclusion
+  prefLabel: Benefit exclusion
+  definition: A drug or drug class the plan never covers under the pharmacy benefit, such as cosmetic drugs.
+  altLabels:
+  - excluded drug
+  - exclusion
+  concepts:
+  - coverage.exclusion

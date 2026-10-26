@@ -1,0 +1,21 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: Eligibility Processing Guide v3
+  section: 2.1 Terminated members
+  title: Claims after coverage termination
+  text: A claim whose date of service is after the member's coverage end date, where the coverage ended by termination,
+    rejects as member not eligible. Grace periods are configured separately and are not applied by this check.
+  owner: eligibility-sme-team
+  sample: true
+  version: '3'
+  effective_from: '2026-01-01'
+- doc: Eligibility Processing Guide v3
+  section: 2.2 Future effective members
+  title: Claims before coverage starts
+  text: A claim whose date of service is before the member's coverage start date rejects as not yet eligible, even
+    if the member is already loaded in the eligibility file.
+  owner: eligibility-sme-team
+  sample: true
+  version: '3'
+  effective_from: '2026-01-01'

@@ -1,0 +1,24 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: cob
+  prefLabel: Coordination of benefits
+  definition: How two plans covering the same member decide which pays first and how the second plan pays.
+  altLabels:
+  - COB
+  concepts:
+  - cob
+- id: other-coverage-code
+  prefLabel: Other coverage code
+  definition: An NCPDP field on the claim saying whether the member has other coverage and whether it was billed.
+  altLabels:
+  - OCC
+  concepts:
+  - cob.other_coverage
+- id: primary-payer
+  prefLabel: Primary payer
+  definition: The plan that must be billed first when a member has more than one coverage.
+  altLabels:
+  - primary coverage
+  concepts:
+  - cob.other_coverage

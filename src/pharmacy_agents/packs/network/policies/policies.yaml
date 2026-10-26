@@ -1,0 +1,12 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: Network Management Guide v4
+  section: 5.2 Specialty at retail
+  title: Specialty drugs at retail
+  text: Specialty drugs filled at a retail pharmacy are limited to the plan's retail specialty days supply. Longer
+    fills must go through the specialty pharmacy and reject at retail with 76.
+  owner: network-sme-team
+  sample: true
+  version: '4'
+  effective_from: '2026-01-01'
