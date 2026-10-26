@@ -1,0 +1,63 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: Plan Setup Guide v7
+  section: 4.2 Prior Auth
+  title: Prior authorization (until 2026-10-01)
+  text: Drugs flagged individually as requiring prior authorization reject with 75 unless an approved authorization
+    is on file for the member and drug.
+  owner: um-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'
+- doc: Plan Setup Guide v8
+  section: 4.2 Prior Auth
+  title: Prior authorization (from 2026-10-01)
+  text: Prior authorization applies to drugs flagged individually and to every drug on a tier the plan lists as
+    a prior authorization tier. Without an approved authorization on file, the claim rejects with 75.
+  owner: um-sme-team
+  sample: true
+  version: '8'
+  effective_from: '2026-10-01'
+- doc: ENG-REL-4412 release notes
+  title: 'Release ENG-REL-4412: prior authorization by tier'
+  text: Adds prior authorization by formulary tier. Plans list their prior authorization tiers in plan setup; drugs
+    on those tiers need an authorization even when not flagged individually. Effective 2026-10-01.
+  owner: um-sme-team
+  sample: true
+  version: '4412'
+  effective_from: '2026-10-01'
+- doc: Plan Setup Guide v7
+  section: 4.3 Step therapy
+  title: Step therapy
+  text: A second-line drug rejects when none of its required first-line drugs was filled within the lookback window
+    recorded in claims history.
+  owner: um-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'
+- doc: Plan Setup Guide v7
+  section: 4.4 Quantity limits
+  title: Quantity limits
+  text: A fill whose quantity is above the drug's per-fill quantity limit rejects with 76 (plan limitations exceeded).
+  owner: um-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'
+- doc: Plan Setup Guide v7
+  section: 4.4 Days supply limits
+  title: Days supply limits
+  text: A fill whose days supply is above the plan maximum for the dispensing channel rejects with 76.
+  owner: um-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'
+- doc: Plan Setup Guide v7
+  section: 4.5 Transition fills
+  title: Transition fills
+  text: 'New members within the plan''s transition window receive a transition fill: prior authorization is waived
+    so therapy continues while an authorization is requested.'
+  owner: um-sme-team
+  sample: true
+  version: '7'
+  effective_from: '2026-01-01'

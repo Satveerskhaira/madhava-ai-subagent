@@ -1,0 +1,21 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: Clinical Edits Guide v2
+  section: 1.1 Refill too soon
+  title: Refill too soon
+  text: A refill rejects with 79 when the days since the last fill are less than the plan's threshold percentage
+    of the previous days supply.
+  owner: clinical-sme-team
+  sample: true
+  version: '2'
+  effective_from: '2026-01-01'
+- doc: Clinical Edits Guide v2
+  section: 2.3 Drug-drug interactions
+  title: Severe drug-drug interactions
+  text: When the plan rejects severe interactions, a claim for a drug with a severe interaction with an active medication
+    in the member's history rejects with 88.
+  owner: clinical-sme-team
+  sample: true
+  version: '2'
+  effective_from: '2026-01-01'

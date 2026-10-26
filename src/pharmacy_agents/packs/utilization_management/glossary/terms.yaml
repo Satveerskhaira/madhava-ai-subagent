@@ -1,0 +1,37 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: prior-authorization
+  prefLabel: Prior authorization
+  definition: Approval the plan requires before it will pay for certain drugs.
+  altLabels:
+  - PA
+  - prior auth
+  - preauthorization
+  concepts:
+  - um.prior_authorization
+  example: A tier 4 GLP-1 rejects with 75 until a prior authorization is on file.
+- id: step-therapy
+  prefLabel: Step therapy
+  definition: A rule that a first-line drug must be tried before a second-line drug is covered.
+  altLabels:
+  - ST
+  - step edit
+  concepts:
+  - um.step_therapy
+- id: quantity-limit
+  prefLabel: Quantity limit
+  definition: The most of a drug the plan covers per fill or per period.
+  altLabels:
+  - QL
+  - quantity limits
+  concepts:
+  - um.quantity_limits
+- id: transition-fill
+  prefLabel: Transition fill
+  definition: A temporary fill that waives prior authorization or step therapy for a new member, so therapy is not
+    interrupted.
+  altLabels:
+  - transition supply
+  concepts:
+  - um.prior_authorization

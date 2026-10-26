@@ -1,0 +1,11 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: specialty-channel-limit
+  prefLabel: Specialty channel limit
+  definition: The most days supply of a specialty drug a retail pharmacy may dispense before the specialty pharmacy
+    must be used.
+  altLabels:
+  - retail specialty limit
+  concepts:
+  - network.specialty_channel

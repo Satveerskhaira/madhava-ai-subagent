@@ -1,0 +1,21 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: Benefit Summary 2026
+  section: Pharmacy cost share
+  title: Pharmacy cost share by tier and channel
+  text: The member pays a flat copay or a coinsurance percentage set by the drug's tier and the dispensing channel.
+    Coinsurance is capped at the plan's per-fill maximum.
+  owner: benefits-sme-team
+  sample: true
+  version: '2026'
+  effective_from: '2026-01-01'
+- doc: Benefit Summary 2026
+  section: Deductible
+  title: Pharmacy deductible
+  text: On tiers subject to the deductible, the member pays the full drug cost until the deductible is met; copay
+    and coinsurance apply after that.
+  owner: benefits-sme-team
+  sample: true
+  version: '2026'
+  effective_from: '2026-01-01'

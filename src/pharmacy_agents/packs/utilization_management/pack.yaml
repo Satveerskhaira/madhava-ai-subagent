@@ -11,3 +11,5 @@ files:
   catalog: catalog/fields.yaml
   domains: domains
   investigator: procedures/investigator.yaml
+  glossary: glossary/terms.yaml
+  policies: policies/policies.yaml

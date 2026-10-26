@@ -1,0 +1,32 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: copay
+  prefLabel: Copay
+  definition: A flat amount the member pays per fill, set by tier and channel.
+  altLabels:
+  - copayment
+  - co-pay
+  concepts:
+  - cost_share.copay
+- id: coinsurance
+  prefLabel: Coinsurance
+  definition: A percentage of the drug cost the member pays, often capped per fill.
+  altLabels:
+  - coins
+  concepts:
+  - cost_share.coinsurance
+- id: deductible
+  prefLabel: Deductible
+  definition: The amount the member pays in full each year before copays or coinsurance apply on deductible tiers.
+  altLabels:
+  - ded
+  concepts:
+  - cost_share.deductible
+- id: accumulator
+  prefLabel: Accumulator
+  definition: A running total of what the member has paid toward the deductible or out-of-pocket maximum.
+  altLabels:
+  - accumulators
+  concepts:
+  - cost_share.deductible

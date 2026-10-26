@@ -1,4 +1,4 @@
 # Kernel and pharmacy base live in the madhava-ai repository for now (pinned; switch to tags/commits on release).
-rulegraph[adk] @ git+https://github.com/Satveerskhaira/madhava-ai.git@domain-repos#subdirectory=kernel
-pharmacy-base @ git+https://github.com/Satveerskhaira/madhava-ai.git@domain-repos#subdirectory=base
+rulegraph[adk] @ git+https://github.com/Satveerskhaira/madhava-ai.git@knowledge-standards#subdirectory=kernel
+pharmacy-base @ git+https://github.com/Satveerskhaira/madhava-ai.git@knowledge-standards#subdirectory=base
 -e .[adk,dev]

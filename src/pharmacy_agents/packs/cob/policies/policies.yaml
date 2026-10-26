@@ -1,0 +1,12 @@
+# Policy sections this domain's rules are derived from. SAMPLE text for the reference implementation.
+
+policies:
+- doc: COB Processing Guide v2
+  section: 1.2 Primary payer first
+  title: Bill the primary payer first
+  text: When other primary coverage is on file and the plan is secondary, a claim submitted without billing the
+    primary payer (other coverage code 0 or 1) rejects with 41.
+  owner: cob-sme-team
+  sample: true
+  version: '2'
+  effective_from: '2026-01-01'

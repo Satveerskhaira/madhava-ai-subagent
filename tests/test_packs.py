@@ -84,3 +84,18 @@ def test_cost_share_slices_resolve_tier_and_channel_by_date(system):
     assert sep.pointer == "/costShare/tiers/2/retail/copay"            # tier from the plan, channel from the claim
     assert (sep.reference_version, sep.value) == ("2026.07", 35.0)
     assert (may.reference_version, may.value) == ("2026.01", 30.0)
+
+
+@pytest.mark.parametrize("agent", ["eligibility", "coverage", "utilization_management", "clinical_dur", "network",
+                                   "cob", "cost_share"])
+def test_each_domain_stands_alone_on_the_base(agent):
+    """As if each domain were its own repo: its fragment, glossary terms and policy text validate with only the base."""
+    import pharmacy_agents
+    system = pharmacy_agents.build(agents=[agent])
+    kn = system.knowledge
+    assert validate(kn) == [] and list(system.agents) == [agent]
+    own_terms = [t for t in kn.glossary.terms.values() if t.kind == "term" and any(
+        kn.taxonomy.agent_for(c) == agent and not kn.taxonomy.get(c).agent for c in t.concepts)]
+    assert own_terms, f"{agent} has no glossary terms of its own"
+    cited = {r.doc + (f" / {r.section}" if r.section else "") for c in kn.rules.rules.values() for r in c.source_refs}
+    assert cited <= set(kn.policies)

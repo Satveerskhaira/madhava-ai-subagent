@@ -1,0 +1,18 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: coverage-period
+  prefLabel: Coverage period
+  definition: The dates a member is enrolled with pharmacy coverage, from coverage start to coverage end.
+  altLabels:
+  - enrollment period
+  concepts:
+  - eligibility.member_coverage
+- id: termination
+  prefLabel: Coverage termination
+  definition: The end of a member's coverage, after which claims reject as not eligible.
+  altLabels:
+  - terminated member
+  - termed
+  concepts:
+  - eligibility.member_coverage

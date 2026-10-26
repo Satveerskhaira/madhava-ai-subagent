@@ -1,0 +1,27 @@
+# Glossary terms owned by this domain (extend the base glossary scheme).
+
+terms:
+- id: dur
+  prefLabel: Drug utilization review
+  definition: Automated clinical checks on a claim, such as drug interactions and early refills.
+  altLabels:
+  - DUR
+  - clinical edit
+  concepts:
+  - dur
+- id: refill-too-soon
+  prefLabel: Refill too soon
+  definition: A refill requested before enough of the previous fill's days supply has been used.
+  altLabels:
+  - RTS
+  - early refill
+  concepts:
+  - dur.refill_too_soon
+- id: drug-interaction
+  prefLabel: Drug-drug interaction
+  definition: A harmful effect when two drugs are taken together.
+  altLabels:
+  - DDI
+  - drug interaction
+  concepts:
+  - dur.drug_interaction
